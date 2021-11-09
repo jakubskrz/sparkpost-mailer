@@ -16,6 +16,8 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class SparkPostApiTransport extends AbstractApiTransport
 {
+    private const HOST = 'api.sparkpost.com';
+
     /**
      * @var string
      */
@@ -52,7 +54,7 @@ class SparkPostApiTransport extends AbstractApiTransport
 
         $this->log($payload);
 
-        $response = $this->client->request('POST', 'https://api.sparkpost.com/api/v1/transmissions/', [
+        $response = $this->client->request('POST', 'https://'.$this->getEndpoint().'/api/v1/transmissions/', [
             'headers' => [
                 'Authorization' => $this->key,
                 'Content-Type'  => 'application/json',
@@ -63,6 +65,11 @@ class SparkPostApiTransport extends AbstractApiTransport
         $this->handleError($response);
 
         return $response;
+    }
+
+    private function getEndpoint(): ?string
+    {
+        return ($this->host ?: self::HOST).($this->port ? ':'.$this->port : '');
     }
 
     private function buildRecipients(Envelope $envelope): array

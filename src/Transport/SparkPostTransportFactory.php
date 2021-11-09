@@ -13,10 +13,11 @@ class SparkPostTransportFactory extends AbstractTransportFactory
     {
         $scheme = $dsn->getScheme();
         $user = $this->getUser($dsn);
+        $host = 'default' === $dsn->getHost() ? null : $dsn->getHost();
         $port = $dsn->getPort();
 
         if ('sparkpost+api' === $scheme) {
-            return new SparkPostApiTransport($user, $this->client, $this->dispatcher, $this->logger);
+            return (new SparkPostApiTransport($user, $this->client, $this->dispatcher, $this->logger))->setHost($host)->setPort($port);
         }
 
         if (in_array($scheme, ['sparkpost', 'sparkpost+smtp', 'sparkpost+smtps'])) {
