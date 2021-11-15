@@ -49,6 +49,7 @@ class SparkPostApiTransport extends AbstractApiTransport
                 'options'           => $email->getOptions(),
                 'metadata'          => $email->getMetadata(),
                 'substitution_data' => $email->getSubstitutionData(),
+                'return_path'       => $email->getReturnPath() !== null ? $email->getReturnPath()->toString() : '',
             ]));
         }
 
